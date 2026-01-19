@@ -1,0 +1,1251 @@
+<ion-header [translucent]="true">
+  <ion-toolbar>
+    <ion-title>
+  <ion-icon name="arrow-back-outline" (click)="openpage()"></ion-icon>
+     <span>
+      Bill Approval
+     </span> </ion-title>
+</ion-toolbar>
+</ion-header>
+<!-- class="ion-text-wrap" -->
+<ion-content [fullscreen]="true">
+  <ion-refresher slot="fixed" (ionRefresh)="handleRefresh($event)">
+    <ion-refresher-content></ion-refresher-content>
+  </ion-refresher>
+  <ion-toolbar>
+    <ion-segment scrollable="true"  [(ngModel)]="esti_type"  (ionChange)="change_option($event)" style="background-color: #f4f5f8;margin-top: 6px !important;    width: 98% !important;margin-left: 3px !important;">
+      <ion-segment-button  *ngFor="let option of types" value="{{option.approval_type}}">
+        <ion-label >{{option.approval_name}}</ion-label>
+      </ion-segment-button>
+    </ion-segment>
+  </ion-toolbar>
+
+  <div *ngIf="option === 'Bill'">
+    <ion-list>
+      <ion-item-sliding *ngFor="let data of responsedata;let i = index">
+         <ion-item style="width: 100%;" lines="none">
+          <ion-card style="
+          box-shadow: rgba(50, 50, 105, 0.15) 0px 2px 5px 0px, rgba(0, 0, 0, 0.05) 0px 1px 1px 0px;width: 100%;margin-top: 1px;">
+          <ion-card-content style="
+          font-size: 13px;
+          font-weight: 600;line-height: 1.2;padding: 5px;">
+           <ion-row>
+             <ion-col style="margin-left: -11px;" size="6">
+              <ion-chip (click)="openModal1(data)">
+                <ion-avatar>
+                  <ion-icon style="font-size: 21px;"  color="primary" name="person"></ion-icon>
+                </ion-avatar>
+                <ion-label>{{data.cus_name}}</ion-label>
+              </ion-chip>
+            </ion-col>
+            <ion-col size="5" style="margin: auto;font-size: 11px !important;">
+              {{data.req_date}} {{data.req_time}}
+            </ion-col>
+             <ion-col style="margin: auto;text-align: end;" size="1">
+              <ion-icon style="font-size: 23px;" name="print" (click)="openModal(data)"></ion-icon>
+             </ion-col>
+           </ion-row>
+
+           <ion-row>
+             <ion-col col-6><span >Bill Amount </span> <h1 style="color: black;">{{data.apprl_tot_bill_amount}}</h1></ion-col>
+             <ion-col col-2 ><span style="    font-weight: 600;
+              color: black;
+              float: inline-end;
+              font-size: 14px;
+              margin-top: 4px;">
+              ( - )
+              <!-- <img style="height: 35px;" src='assets/discount.svg' /> -->
+            </span>
+             </ion-col>
+             <ion-col col-4 style="display: flex;">
+              <ion-input (tap)="check(i,data)" [ngStyle]="{'border': data['is_disc_modified'] === '0' ? '1px solid #d4d0d0' : '2px solid #2fdf75'}"  [readonly]="data['is_disc_modified'] === '0'"  style="border:1px solid #d4d0d0;height: 30px;color: black" type="number" (keyup)="onKeyUp($event)" [(ngModel)]="data['bill_discount']" ></ion-input>
+              <ion-icon (click)="get_disc(data)" style="font-size: 23px;
+              float: inline-end;color: red;
+      margin-top: 1px;"   name="create-outline"></ion-icon>
+            </ion-col>
+
+           </ion-row>
+
+  <ion-row>
+    <ion-col col-3 style="font-size: 11px;
+    margin: auto;" >Profit Amount</ion-col>
+    <ion-col col-3 style="font-size: 16px !important;font-weight: bold !important;color: black"> {{data.profit_amount}}</ion-col>
+    <ion-col col-3 style="text-align: center;font-size: 11px;
+    margin: auto;">Profit %</ion-col>
+    <ion-col col-3 style="font-size: 16px !important;font-weight: bold !important;color: black"> {{data.profit_percentage}}</ion-col>
+  </ion-row>
+
+           <ion-row>
+             <ion-col size="7" style="display: flex;"><span style="color: black;"><ion-icon style="font-size: 15px;color: black;"  name="briefcase-sharp"></ion-icon></span><span style="margin-left: 5px;">{{data.apprl_requested_by}} - {{data.brn_short_name}}</span>
+            </ion-col>
+              <ion-col size="5" >
+                  <span style="float: inline-end;" (click)="tog(data['approval_id'],i,'1')" *ngIf="data['toggle']"> view more
+                  <ion-icon   name="caret-up-outline" ></ion-icon>
+                  <!-- <ion-icon (click)="tog(data['approval_id'],i,'2')" *ngIf="!data['toggle']"  name="caret-up-outline"></ion-icon> -->
+                  </span>
+                  <span style="float: inline-end;" (click)="tog(data['approval_id'],i,'2')" *ngIf="!data['toggle']"> view more
+                    <!-- <ion-icon  (click)="tog(data['approval_id'],i,'1')" *ngIf="data['toggle']" name="caret-down-outline"></ion-icon> -->
+                    <ion-icon  name="caret-down-outline"></ion-icon>
+                    </span>
+             </ion-col>
+            </ion-row>
+
+            <ion-card *ngIf="data['sales_details'].length > 0 && data['toggle']">
+              <ion-card-header >
+                Sales Details
+              </ion-card-header>
+              <ion-card-content *ngIf="data['toggle']">
+                <div *ngFor="let data of data['sales_details'];let i = index"  style="border-bottom: 1px solid lightgrey;" >
+
+                  <ion-row>
+                    <ion-col style="margin: auto;font-weight: bold;color: black;">
+                    {{data['product_name']}} -   {{data['tag_code']}}
+                  </ion-col>
+                  </ion-row>
+
+
+                  <ion-row >
+
+                    <ion-col>
+                      <ion-row> Rate.Per.Gm </ion-row>
+                      <ion-row style="color: black;font-size: 14px;">{{data.per_grm_amount}}</ion-row> </ion-col>
+                      <ion-col>
+                        <ion-row> Pur.per.Gm </ion-row>
+                        <ion-row style="color: black;font-size: 14px;">{{data.purchase_rate}}</ion-row>
+                       </ion-col>
+                    <ion-col>
+                      <ion-row>Age</ion-row>
+                      <ion-row style="color: black;font-size: 14px;"> {{data['age']}}</ion-row>
+                     </ion-col>
+                  </ion-row>
+
+                    <ion-row >
+
+                      <ion-col>
+                        <ion-row>G.Wt </ion-row>
+                        <ion-row style="color: black;font-size: 14px;">{{data.gross_wt}}</ion-row>
+                       </ion-col>
+                      <ion-col>
+                        <ion-row>N.Wt </ion-row>
+                        <ion-row style="color: black;font-size: 14px;">{{data.net_wt}}</ion-row> </ion-col>
+
+                        <ion-col>
+                          <ion-row>Dis % </ion-row>
+                          <ion-row style="color: black;font-size: 14px;">{{data.discount_percentage}}</ion-row>
+                        </ion-col>
+
+                    </ion-row>
+
+                  <ion-row style="background: palegreen;">
+                    <ion-col>
+                      <ion-row>Sa.VA</ion-row>
+                      <ion-row style="color: black;font-size: 14px;"> {{data.sale_va}}</ion-row>
+                    </ion-col>
+                    <ion-col>
+                      <ion-row> Sa.Mc</ion-row>
+                      <ion-row style="color: black;font-size: 14px;"> {{data.sale_mc}}</ion-row>
+                    </ion-col>
+                    <ion-col>
+                      <ion-row>Sa.Cost</ion-row>
+                      <ion-row style="color: black;font-size: 14px;">{{data.sale_amount}}</ion-row>
+                    </ion-col>
+                  </ion-row>
+
+                  <ion-row style="background: lightgoldenrodyellow;">
+
+                    <ion-col>
+                      <ion-row>Pur.VA</ion-row>
+                      <ion-row style="color: black;font-size: 14px;">{{data.purchase_va}}</ion-row>
+                    </ion-col>
+                    <ion-col>
+                      <ion-row>Pur.Mc</ion-row>
+                      <ion-row style="color: black;font-size: 14px;"> {{data.pur_mc}}</ion-row>
+                    </ion-col>
+                    <ion-col>
+                      <ion-row>Pur.Cost</ion-row>
+                      <ion-row style="color: black;font-size: 14px;">{{data.tag_purchase_cost}}</ion-row>
+                    </ion-col>
+                  </ion-row>
+
+                  <ion-row style="background: lightskyblue;">
+                    <ion-col>
+                      <ion-row>Pro % </ion-row>
+                      <ion-row style="color: black;font-size: 14px;">{{data.profit_percentage}}</ion-row>
+                    </ion-col>
+                    <ion-col>
+                      <ion-row>Pro.Amt </ion-row>
+                      <ion-row style="color: black;font-size: 14px;">{{data.profit_amt}}</ion-row>
+                    </ion-col>
+                    <ion-col>
+                      <ion-row>Pro.VA</ion-row>
+                      <ion-row style="color: black;font-size: 14px;">{{data.profit_va}} G</ion-row>
+                    </ion-col>
+                  </ion-row>
+
+                  <!--stone details :  -->
+                  <!-- sales -->
+
+                  <ion-row>
+                    <ion-col>
+                      <ion-row>Sale.Stn</ion-row>
+                      <ion-row style="color: black;font-size: 14px;">{{data.sale_stone}}</ion-row>
+                    </ion-col>
+                    <ion-col>
+                      <ion-row>Pur.Stn </ion-row>
+                      <ion-row style="color: black;font-size: 14px;">{{data.pur_stone}}</ion-row>
+                    </ion-col>
+                    <ion-col>
+                      <ion-row>Pro.Stn </ion-row>
+                      <ion-row style="color: black;font-size: 14px;">{{data.profit_stone}}</ion-row>
+                    </ion-col>
+                  </ion-row>
+
+                  <!-- purchase Diamond stones :  -->
+                  <ion-row>
+                    <ion-col>
+                      <ion-row>Sale.Dia</ion-row>
+                      <ion-row style="color: black;font-size: 14px;">{{data.sale_diamond}}</ion-row>
+                    </ion-col>
+                    <ion-col>
+                      <ion-row>Pur.Dia </ion-row>
+                      <ion-row style="color: black;font-size: 14px;">{{data.pur_diamond}}</ion-row>
+                    </ion-col>
+                    <ion-col>
+                      <ion-row>Pro.Dia </ion-row>
+                      <ion-row style="color: black;font-size: 14px;">{{data.profit_diamond}}</ion-row>
+                    </ion-col>
+                  </ion-row>
+
+                  <ion-row>
+                    <ion-col>
+                      <ion-row>Dis.Amt </ion-row>
+                      <ion-row style="color: black;font-size: 14px;">{{data.discount}}</ion-row>
+                     </ion-col>
+                    <ion-col>
+                      <ion-row>Min.Sale</ion-row>
+                      <ion-row style="color: black;font-size: 14px;">{{data.min_sale_value}}</ion-row>
+                    </ion-col>
+                    <!-- empty add -->
+                    <ion-col>
+                      <ion-row></ion-row>
+                      <ion-row style="color: black;font-size: 14px;"></ion-row>
+                    </ion-col>
+
+                    </ion-row>
+
+
+              </div>
+
+
+              </ion-card-content>
+              </ion-card>
+
+              <ion-card *ngIf="data['purchase_details'].length > 0 && data['toggle']">
+                <ion-card-header >
+                  Purchase Details
+                </ion-card-header>
+                <ion-card-content *ngIf="data['toggle']">
+                  <div *ngFor="let data of data['purchase_details'];let i = index"  style="border-bottom: 1px solid lightgrey;" >
+                  <ion-row>
+                    <ion-col>
+                      <ion-row>Old.Met.Type</ion-row>
+                      <ion-row>{{data.old_metal_type_name}}</ion-row>
+                    </ion-col>
+                    <ion-col>
+                      <ion-row>Tot.Amt</ion-row>
+                      <ion-row style="color: black;font-size: 13px;"> {{data.bill_amount}}</ion-row>
+                    </ion-col>
+                    <ion-col>
+                      <ion-row>Rateper.Gm</ion-row>
+                      <ion-row style="color: black;font-size: 13px;"> {{data.bill_rate_per_grm}}</ion-row>
+                    </ion-col>
+                    <!-- <ion-col>
+                      <ion-row> Sa.Mc</ion-row>
+                      <ion-row> {{data.sale_mc}}</ion-row>
+                    </ion-col> -->
+                  </ion-row>
+                  <ion-row>
+                    <ion-col>
+                      <ion-row>G.Wt </ion-row>
+                      <ion-row style="color: black;font-size: 13px;">{{data.pur_gross_val}}</ion-row>
+                     </ion-col>
+                     <ion-col>
+                      <ion-row>N.Wt </ion-row>
+                      <ion-row style="color: black;font-size: 13px;">{{data.pur_net_val}}</ion-row> </ion-col>
+                    <ion-col>
+                      <ion-row>less.Wt</ion-row>
+                      <ion-row style="color: black;font-size: 13px;">{{data.pur_less_wt}}</ion-row>
+                     </ion-col>
+                  </ion-row>
+                  <!-- <ion-row>
+                    <ion-col>
+                      <ion-row>Pur.Cost</ion-row>
+                      <ion-row>{{data.tag_purchase_cost}}</ion-row>
+                    </ion-col>
+                    <ion-col>
+                      <ion-row>Sa.Cost</ion-row>
+                      <ion-row>{{data.sale_amount}}</ion-row>
+                    </ion-col>
+                    <ion-col>
+                      <ion-row>Pro % </ion-row>
+                      <ion-row>{{data.profit_percentage}}</ion-row>
+                    </ion-col>
+                    <ion-col>
+                      <ion-row>Dis % </ion-row>
+                      <ion-row>{{data.discount_percentage}}</ion-row>
+                    </ion-col>
+                  </ion-row> -->
+
+
+                </div>
+
+
+                </ion-card-content>
+                </ion-card>
+
+                <ion-card *ngIf="data['chit_details'].length > 0 && data['toggle']">
+                  <ion-card-header >
+                    Chit Details
+                  </ion-card-header>
+                  <ion-card-content *ngIf="data['toggle']">
+                    <div *ngFor="let data of data['chit_details'];let i = index"  style="border-bottom: 1px solid lightgrey;" >
+                    <ion-row>
+                      <ion-col>
+                        <ion-row>Sch.Ac.no</ion-row>
+                        <ion-row style="color: black;font-size: 13px;">{{data.scheme_acc_number}}</ion-row>
+                      </ion-col>
+                      <ion-col>
+                        <ion-row>Clo.Amt</ion-row>
+                        <ion-row style="color: black;font-size: 13px;"> {{data.closing_amount}}</ion-row>
+                      </ion-col>
+                      <ion-col>
+                        <ion-row>clo.Wt</ion-row>
+                        <ion-row style="color: black;font-size: 13px;"> {{data.closing_weight}}</ion-row>
+                      </ion-col>
+                    </ion-row>
+
+                  </div>
+                  </ion-card-content>
+                  </ion-card>
+
+          </ion-card-content>
+
+          <!-- <ion-col col-4>Inactive (Ac) - {{cus_detail.inactive_acount}}</ion-col> -->
+
+       </ion-card>
+
+          <!-- <ion-card style="width: 100%;
+             box-shadow: rgba(50, 50, 105, 0.15) 0px 2px 5px 0px, rgba(0, 0, 0, 0.05) 0px 1px 1px 0px;">
+             <ion-card-content style="
+             font-size: 13px;
+             font-weight: 600;">
+              <ion-row>
+                <ion-col col-6>Customer    -</ion-col>
+                <ion-col col-6 style="
+                font-size: 12px;
+                font-weight: 600;">{{data.cus_name}}</ion-col>
+              </ion-row>
+              <ion-row>
+                <ion-col col-6>Bill Amount  -</ion-col>
+                <ion-col col-6 style="margin-top: 5px;
+                font-size: 14px;
+                font-weight: 600;">₹{{data.apprl_tot_bill_amount}}</ion-col>
+              </ion-row>
+              <ion-row>
+                <ion-col col-6>Discount   -</ion-col>
+                <ion-col col-6 style="margin-top: 5px;
+                font-size: 13px;
+                font-weight: 600;">₹{{data.bill_discount}}</ion-col>
+              </ion-row>
+              <ion-row>
+                <ion-col col-6>Employee   -</ion-col>
+                <ion-col col-6 style="margin-top: 5px;
+                font-size: 10px;
+                font-weight: 600;">{{data.apprl_requested_by}}</ion-col>
+                <ion-col col-6 style="margin-top: -20px ">
+                      <ion-text (click)="openModal1(data)">
+                        <div style="float: right;margin-top: 18px;color: black;">
+                          <span> view more >></span>
+                        </div>
+                      </ion-text>
+                    </ion-col>
+              </ion-row>
+             </ion-card-content>
+
+          </ion-card> -->
+
+        </ion-item>
+        <ion-item-options side="start">
+          <ion-button color="danger" fill="clear" (click)="getApprovel_detail(data,2)"> <!-- Added fill="clear" to make the button transparent -->
+            <ion-icon name="trash"></ion-icon>
+          </ion-button>
+        </ion-item-options>
+        <ion-item-options side="end">
+          <ion-button color="success" fill="clear" (click)="getApprovel_detail(data,1)"> <!-- Added fill="clear" to make the button transparent -->
+            <ion-icon name="checkmark-done-sharp"></ion-icon>
+          </ion-button>
+        </ion-item-options>
+      </ion-item-sliding>
+    </ion-list>
+    <div style="margin-top: -16px;text-align: center;height: 270px !important;" *ngIf="responsedata.length === 0 " >
+      <img style="width: 100% !important;" src='assets/empty.jpg'/>
+     </div>
+  </div>
+
+
+    <div *ngIf="option === 'Credit'">
+      <ion-list>
+        <ion-item-sliding *ngFor="let data of responsedata">
+           <ion-item style="width: 100%;" lines="none">
+            <ion-card style="
+            box-shadow: rgba(50, 50, 105, 0.15) 0px 2px 5px 0px, rgba(0, 0, 0, 0.05) 0px 1px 1px 0px;width: 100%;margin-top: 1px;">
+            <ion-card-content style="
+            font-size: 13px;
+            font-weight: 600;line-height: 1.2;padding: 5px;">
+             <ion-row>
+               <ion-col size="5" style="margin-left: -11px;">
+                <ion-chip (click)="openModal1(data)">
+                  <ion-avatar>
+                    <ion-icon style="font-size: 21px;"  color="primary" name="person"></ion-icon>
+                  </ion-avatar>
+                  <ion-label>{{data.cus_name}}</ion-label>
+                </ion-chip>
+              </ion-col>
+              <ion-col size="4" style="margin: auto;font-size: 11px !important;">
+                <ion-row >
+                  <ion-col>
+                  Outstanding
+                  <h2> {{data.cus_outstanding}} </h2>
+                </ion-col>
+                </ion-row>
+                <!-- <ion-row>
+                  <ion-col>
+
+                  </ion-col>
+                </ion-row> -->
+              </ion-col>
+              <ion-col size="3" style="margin: auto;font-size: 11px !important;">
+                <ion-row>
+                  <ion-col>
+                    <ion-badge style="font-size: 12px !important;color: white !important;" *ngIf="data.is_credit === '1'" color="success">CR</ion-badge>
+                    <ion-badge style="font-size: 12px !important;color: white !important;" *ngIf="data.is_credit === '2'" color="warning">To Be</ion-badge>
+                  </ion-col>
+                </ion-row>
+                <ion-row>
+                  <ion-col>
+                 {{data.req_date}} {{data.req_time}}
+                  </ion-col>
+                </ion-row>
+
+              </ion-col>
+             </ion-row>
+
+             <ion-row> <!-- krishna -->
+               <ion-col size="4"><span >Bill Amount </span> <h1 style="color: black;">{{data.apprl_tot_bill_amount}}</h1></ion-col>
+               <ion-col size="4" style="margin: auto;text-align: center;color: #2fdf75 !important;"><span >Payable  </span> <h2>{{data.apprl_cr_paid_amt}}</h2></ion-col>
+               <ion-col size="4" style="margin: auto;text-align: center;"><span  style="color: red;">Due Payment</span> <h2 style="color: red;font-weight: 800;">{{data.due_amount}}</h2></ion-col>
+             </ion-row>
+
+
+             <ion-row>
+               <ion-col size="7" style="display: flex;"><span style="color: black;"><ion-icon style="font-size: 15px;color: black;"  name="briefcase-sharp"></ion-icon></span><span style="margin-left: 5px;">{{data.apprl_requested_by}} - {{data.brn_short_name}}</span>
+              </ion-col>
+                <ion-col size="5" (click)="openModal(data)">
+                    <span style="float: inline-end;"> view more >></span>
+               </ion-col>
+              </ion-row>
+
+
+
+            </ion-card-content>
+
+            <!-- <ion-col col-4>Inactive (Ac) - {{cus_detail.inactive_acount}}</ion-col> -->
+
+         </ion-card>
+
+          </ion-item>
+          <ion-item-options side="start">
+            <ion-button color="danger" fill="clear" (click)="getApprovel_detail(data,2)"> <!-- Added fill="clear" to make the button transparent -->
+              <ion-icon name="trash"></ion-icon>
+            </ion-button>
+          </ion-item-options>
+          <ion-item-options side="end">
+            <ion-button color="success" fill="clear" (click)="getApprovel_detail(data,1)"> <!-- Added fill="clear" to make the button transparent -->
+              <ion-icon name="checkmark-done-sharp"></ion-icon>
+            </ion-button>
+          </ion-item-options>
+        </ion-item-sliding>
+      </ion-list>
+      <div style="margin-top: -16px;text-align: center;height: 270px !important;" *ngIf="responsedata.length === 0 " >
+        <img style="width: 100% !important;" src='assets/empty.jpg'/>
+       </div>
+    </div>
+
+    <div *ngIf="option === 'Branch'">
+      <ion-list>
+        <ion-item-sliding *ngFor="let data of responsedata">
+          <ion-item  lines="none"  style="width: 100%;
+          ">
+            <ion-card style="
+            box-shadow: rgba(50, 50, 105, 0.15) 0px 2px 5px 0px, rgba(0, 0, 0, 0.05) 0px 1px 1px 0px;margin-top: 1px;width: 100%;">
+            <ion-card-content style="
+            font-size: 13px;
+      font-weight: 600;
+      line-height: 1.4;padding: 8px;">
+      <ion-row>
+        <ion-col>
+          <ion-row>
+            <ion-col style="color: #2196f3;">BT.Apr.Type</ion-col>
+            <ion-col style="color: black;"> {{data.Bt_approval_type}}</ion-col>
+          </ion-row>
+       </ion-col>
+        <ion-col align="end"  style="margin: auto;color: black;">
+          {{data.req_date}} {{data.req_time}}
+        </ion-col>
+      </ion-row>
+             <ion-row>
+               <ion-col col-6 style="display: grid;color: black;"><span style="color: #2196f3;">From Branch </span>{{data.bt_details.from_branch}}</ion-col>
+               <ion-col col-6 style="display: grid;margin-left: 15px;color: black;"><span style="color: #2196f3;">To Branch </span>{{data.bt_details.to_branch}}</ion-col>
+             </ion-row>
+
+             <ion-row>
+              <ion-col size="4">
+                <ion-row>
+                  <ion-col style="color: #2196f3;font-size: 15px;">Bt.Typ</ion-col>
+                  <ion-col style="font-size: 16px !important;color: black;">{{data.transfer_item_type}}</ion-col>
+                </ion-row>
+              </ion-col>
+            <ion-col size="4">
+              <ion-row>
+                <ion-col style="color: #2196f3;font-size: 15px;">Gwt</ion-col>
+                <ion-col style="font-size: 16px !important;color: black;">{{data.tot_grs_wt}}G</ion-col>
+              </ion-row>
+            </ion-col>
+            <ion-col size="4">
+              <ion-row>
+                <ion-col style="color: #2196f3;font-size: 15px;">Nwt</ion-col>
+                <ion-col style="font-size: 16px !important;color: black;">{{data.tot_net_wt}}G</ion-col>
+              </ion-row>
+            </ion-col>
+
+
+            </ion-row>
+
+           <!--   <ion-row>
+               <ion-col size="7">
+                <span style="color: black;">Weight(Gms)</span> {{data.bt_details.net_wt}} G
+              </ion-col>
+              <ion-col size="5">
+
+              </ion-col>
+             </ion-row> -->
+
+             <ion-row>
+              <ion-col size="7" style="display: flex;"><span style="color: black;"><ion-icon style="font-size: 15px;color: black;"  name="briefcase-sharp"></ion-icon></span><span style="margin-left: 5px;">{{data.apprl_requested_by}} - {{data.brn_short_name}}</span></ion-col>
+               <ion-col size="5" style="margin-top: -12px">
+                <span style="color: black;"></span>
+                 <ion-text (click)="openModal(data)">
+                  <div style="float: right;margin-top: 12px;color: black;">
+                  <span> view more >></span>
+                </div>
+              </ion-text>
+            </ion-col>
+             </ion-row>
+
+
+
+            </ion-card-content>
+
+            <!-- <ion-col col-4>Inactive (Ac) - {{cus_detail.inactive_acount}}</ion-col> -->
+
+         </ion-card>
+          </ion-item>
+          <ion-item-options side="start">
+            <ion-button color="danger" fill="clear" (click)="getApprovel_detail(data,2)"> <!-- Added fill="clear" to make the button transparent -->
+              <ion-icon name="trash"></ion-icon>
+            </ion-button>
+          </ion-item-options>
+          <ion-item-options side="end">
+            <ion-button color="success" fill="clear" (click)="getApprovel_detail(data,1)"> <!-- Added fill="clear" to make the button transparent -->
+              <ion-icon name="checkmark-done-sharp"></ion-icon>
+            </ion-button>
+          </ion-item-options>
+        </ion-item-sliding>
+      </ion-list>
+      <div style="margin-top: -16px;text-align: center;height: 270px !important;" *ngIf="responsedata.length === 0 " >
+        <img style="width: 100% !important;" src='assets/empty.jpg'/>
+       </div>
+    </div>
+
+
+    <div *ngIf="option === 'Rate'" >
+<div style="display: flex;margin-left: 10px;">
+  <!-- <div style="border: 1px solid aliceblue;
+      width: 29px;
+      text-align: center;
+      height: 31px;
+      border-radius: 32px;
+      margin-left: -6px;
+      margin-top: 5px;
+      background: aliceblue;"> <ion-icon  name="calendar" style="margin-top: 8px;
+        color: #3a7be0;" id="popover-but4"  ></ion-icon></div> -->
+        <ion-row>
+        <ion-col col-12 style="display: -webkit-box;margin-right: 10px;"  class="scrollmenu_but" >
+          <!-- <div style="border: 1px solid aliceblue;
+          width: 29px;
+          text-align: center;
+          height: 31px;
+          border-radius: 32px;
+          margin-left: -6px;
+          margin-top: 5px;
+          background: aliceblue;"> <ion-icon  name="calendar" style="margin-top: 8px;
+            color: #3a7be0;" id="date-1"  ></ion-icon></div> -->
+          <ion-chip [color]="'primary'"  style="font-size: 11px;margin-left: 8px;height: 1px;" id="popover-but4">
+                <span style="text-align: center;">Date</span></ion-chip>
+      <ion-chip [color]="day === 'today' ? 'primary' : color_mode" style="font-size: 11px;margin-left: 8px;height: 1px;" (click)="get_date('today','1')">
+        <span style="text-align: center;">Today</span></ion-chip>
+      <ion-chip [color]="day === 'yesterday' ? 'secondary' : color_mode" style="font-size: 11px;height: 1px;" (click)="get_date('yest','1')"><span style="text-align: center;">
+        Yesterday
+      </span></ion-chip>
+      <ion-chip [color]="day === 'this Week' ? 'success' : color_mode" style="font-size: 11px;height: 1px;" (click)="get_date('this_week','1')"><span style="text-align: center;">
+        This Week
+       </span> </ion-chip>
+        </ion-col>
+        </ion-row>
+</div>
+
+       <ion-popover trigger="popover-but4">
+        <ng-template>
+          <ion-row>
+            <ion-col col-6>
+              <ion-label style="font-size: 12px;">From</ion-label>
+              <ion-datetime-button     presentation="date"  displayFormat="YYYY-MM-DD" datetime="from_date['Glance_branch']"></ion-datetime-button>
+            <ion-modal  [keepContentsMounted]="true">
+              <ng-template>
+                <ion-datetime  show-default-buttons="true" presentation="date" (ionChange)="onDateChange_from('Glance_branch')"    [(ngModel)]="from_date['Glance_branch']"   id="from_date['Glance_branch']"></ion-datetime>
+              </ng-template>
+            </ion-modal>
+          </ion-col>
+          <ion-col col-6>
+            <ion-label  style="font-size: 12px;">To</ion-label>
+            <ion-datetime-button    presentation="date"  displayFormat="DD-MM-YYYY" datetime="to_date['Glance_branch']"></ion-datetime-button>
+            <ion-modal  [keepContentsMounted]="true">
+              <ng-template>
+                <ion-datetime show-default-buttons="true" presentation="date" (ionChange)="onDateChange_from('Glance_branch')"    [(ngModel)]="to_date['Glance_branch']"   id="to_date['Glance_branch']"></ion-datetime>
+              </ng-template>
+            </ion-modal>
+          </ion-col>
+          </ion-row>
+        </ng-template>
+      </ion-popover>
+
+      <ion-list>
+        <ion-item-sliding *ngFor="let data of responsedata;let i = index">
+           <ion-item style="width: 100%;" lines="none">
+            <ion-card style="
+            box-shadow: rgba(50, 50, 105, 0.15) 0px 2px 5px 0px, rgba(0, 0, 0, 0.05) 0px 1px 1px 0px;width: 100%;margin-top: 1px;">
+
+
+
+            <ion-card-content style="
+            font-size: 13px;
+            line-height:2;padding: 5px;">
+              <ion-row>
+                <ion-col size="6" align="start">
+                  <ion-row style="color: #180e61;font-weight: bold;">
+                    Karigar - {{data.karigar}}
+                  </ion-row>
+                    </ion-col>
+                            <ion-col size="6" align="end" style="color: #180e61;font-weight: bold;">
+                              {{data.ratefixon}}
+                                </ion-col>
+                          </ion-row>
+           <ion-row >
+            <ion-col size="1">
+              <ion-row>
+                <ion-checkbox (ionChange)="selected_data(data, $event)"></ion-checkbox>
+                </ion-row>
+            </ion-col>
+            <ion-col size="3">
+              <ion-row style="color: #180e61;font-weight: bold;">
+                App.Id
+              </ion-row>
+              <ion-row style="color: black;">
+                {{data.rate_fix_id}}
+              </ion-row>
+            </ion-col>
+            <ion-col size="4">
+              <ion-row style="color: #180e61;font-weight: bold;">
+               Po.Ref
+              </ion-row>
+              <ion-row style="color: black;">
+                {{data.po_ref_no}}
+              </ion-row>
+            </ion-col>
+            <ion-col size="4">
+              <ion-row style="color: #180e61;font-weight: bold;">
+                Fix Wt
+                </ion-row>
+                <ion-row style="color: black;">
+                  {{data.rate_fix_wt}}G
+                </ion-row>
+            </ion-col>
+           </ion-row>
+           <ion-row>
+            <ion-col size="1">
+            </ion-col>
+            <ion-col size="3">
+              <ion-row style="color: #180e61;font-weight: bold;">
+                Fix Total.Amt
+              </ion-row>
+              <ion-row style="color: black;">
+                {{data.total_amount}}
+              </ion-row>
+            </ion-col>
+            <ion-col size="4">
+              <ion-row style="color: #180e61;font-weight: bold;">
+                Fix Rate/Gm
+              </ion-row>
+              <ion-row style="color: black;">
+                {{data.rate_fix_rate}}
+              </ion-row>
+            </ion-col>
+            <ion-col size="4">
+              <ion-row style="color: #180e61;font-weight: bold;">
+                Employee
+              </ion-row>
+              <ion-row style="color: black;">
+                {{data.emp_name}}
+              </ion-row>
+            </ion-col>
+           </ion-row>
+
+
+
+            </ion-card-content>
+
+            <!-- <ion-col col-4>Inactive (Ac) - {{cus_detail.inactive_acount}}</ion-col> -->
+
+         </ion-card>
+
+            <!-- <ion-card style="width: 100%;
+               box-shadow: rgba(50, 50, 105, 0.15) 0px 2px 5px 0px, rgba(0, 0, 0, 0.05) 0px 1px 1px 0px;">
+               <ion-card-content style="
+               font-size: 13px;
+               font-weight: 600;">
+                <ion-row>
+                  <ion-col col-6>Customer    -</ion-col>
+                  <ion-col col-6 style="
+                  font-size: 12px;
+                  font-weight: 600;">{{data.cus_name}}</ion-col>
+                </ion-row>
+                <ion-row>
+                  <ion-col col-6>Bill Amount  -</ion-col>
+                  <ion-col col-6 style="margin-top: 5px;
+                  font-size: 14px;
+                  font-weight: 600;">₹{{data.apprl_tot_bill_amount}}</ion-col>
+                </ion-row>
+                <ion-row>
+                  <ion-col col-6>Discount   -</ion-col>
+                  <ion-col col-6 style="margin-top: 5px;
+                  font-size: 13px;
+                  font-weight: 600;">₹{{data.bill_discount}}</ion-col>
+                </ion-row>
+                <ion-row>
+                  <ion-col col-6>Employee   -</ion-col>
+                  <ion-col col-6 style="margin-top: 5px;
+                  font-size: 10px;
+                  font-weight: 600;">{{data.apprl_requested_by}}</ion-col>
+                  <ion-col col-6 style="margin-top: -20px ">
+                        <ion-text (click)="openModal1(data)">
+                          <div style="float: right;margin-top: 18px;color: black;">
+                            <span> view more >></span>
+                          </div>
+                        </ion-text>
+                      </ion-col>
+                </ion-row>
+               </ion-card-content>
+
+            </ion-card> -->
+
+          </ion-item>
+
+        </ion-item-sliding>
+      </ion-list>
+      <div style="margin-top: -16px;text-align: center;height: 270px !important;" *ngIf="responsedata.length === 0 " >
+        <img style="width: 100% !important;" src='assets/empty.jpg'/>
+       </div>
+    </div>
+
+    <div *ngIf="option === 'Kariger'" >
+      <!-- <ion-segment scrollable="true"  [(ngModel)]="type"   style="background-color: #f4f5f8;margin-top: 6px !important;    width: 98% !important;margin-left: 3px !important;">
+        <ion-segment-button  *ngFor="let option of stone_type" value="{{option.id_type}}">
+          <ion-label >{{option.type}}</ion-label>
+        </ion-segment-button>
+      </ion-segment> -->
+
+      <ion-chip [color]="type === 'Wastage' ? 'primary' : color_mode" style="font-size: 11px;margin-left: 8px;height: 1px;" (click)="stone_type('Wastage')">
+        <span style="text-align: center;">Wastage</span></ion-chip>
+      <ion-chip [color]="type === 'Stone' ? 'secondary' : color_mode" style="font-size: 11px;height: 1px;" (click)="stone_type('Stone')"><span style="text-align: center;">
+        Stone
+      </span></ion-chip>
+
+
+       <ion-chip style="background: #f4f5f8;
+       font-size: 11px;height: 10px;">
+         <ion-select style="font-size: 11px;" placeholder="Kariger" [(ngModel)]="kariger_id" (ionChange)="karigar_filter()">
+         <ion-select-option *ngFor="let m of kariger_det" [value]="m['id_karigar']">{{m['karigar']}}</ion-select-option>
+       </ion-select>
+       </ion-chip>
+
+      <ion-list>
+        <ion-item-sliding *ngFor="let data of responsedata;let i = index">
+           <ion-item style="width: 100%;" lines="none">
+            <ion-card *ngIf="type === 'Wastage'" style="
+            box-shadow: rgba(50, 50, 105, 0.15) 0px 2px 5px 0px, rgba(0, 0, 0, 0.05) 0px 1px 1px 0px;width: 100%;margin-top: 1px;">
+            <ion-card-content style="
+            font-size: 13px;
+            line-height:2;padding: 5px;">
+            <ion-row>
+              <ion-col size="6" align="start">
+                <ion-row style="color: #180e61;font-weight: bold;">
+                  Karigar - {{data.karigar}}
+                </ion-row>
+                  </ion-col>
+                          <ion-col size="6" align="end">
+                            <ion-badge style="font-size: 12px !important;" [ngClass]="data.status === '0' ? 'yet_approve' :'' || data.status === '3' ? 'hold' :'' " >{{data.wastage_status}}</ion-badge>
+                              </ion-col>
+                        </ion-row>
+           <ion-row>
+            <ion-col size="1">
+              <ion-row>
+              <ion-checkbox (ionChange)="selected_data(data, $event)"></ion-checkbox>
+              </ion-row>
+            </ion-col>
+            <ion-col size="4">
+              <ion-row style="color: #180e61;font-weight: bold;">
+               Product
+              </ion-row>
+              <ion-row style="color: black;">
+                {{data.product_name}}
+              </ion-row>
+            </ion-col>
+            <ion-col size="3">
+              <ion-row style="color: #180e61;font-weight: bold;">
+                Purity
+              </ion-row>
+              <ion-row style="color: black;">
+                {{data.purity}}
+              </ion-row>
+            </ion-col>
+            <ion-col size="4">
+              <ion-row style="color: #180e61;font-weight: bold;">
+                Kar.Company
+              </ion-row>
+              <ion-row style="color: black;">
+                {{data.karigar_company}}
+              </ion-row>
+            </ion-col>
+           </ion-row>
+           <ion-row>
+            <ion-col size="1">
+            </ion-col>
+            <ion-col size="4">
+              <ion-row style="color: #180e61;font-weight: bold;">
+                Category
+              </ion-row>
+              <ion-row style="color: black;">
+                {{data.cat_name}}
+              </ion-row>
+            </ion-col>
+            <ion-col size="3">
+              <ion-row style="color: #180e61;font-weight: bold;">
+                Pur.Tch
+              </ion-row>
+              <ion-row style="color: black;">
+                {{data.pur_touch}}
+              </ion-row>
+            </ion-col>
+            <ion-col size="4">
+              <ion-row style="color: #180e61;font-weight: bold;">
+               Employee
+              </ion-row>
+              <ion-row style="color: black;">
+                {{data.created_by}}
+              </ion-row>
+            </ion-col>
+
+
+           </ion-row>
+           <ion-row>
+            <ion-col size="1"></ion-col>
+            <ion-col size="7" style="color: #180e61;font-weight: bold;">
+              Date - {{data.created_on}}
+            </ion-col>
+            <ion-col size="4">
+              <span  (click)="tog(data['approval_id'],i,'1')" *ngIf="data['toggle']" style="color: black;"> view more
+                <ion-icon   name="caret-up-outline" ></ion-icon>
+                <!-- <ion-icon (click)="tog(data['approval_id'],i,'2')" *ngIf="!data['toggle']"  name="caret-up-outline"></ion-icon> -->
+                </span>
+                <span  (click)="tog(data['approval_id'],i,'2')" *ngIf="!data['toggle']" style="color: black;"> view more
+                  <!-- <ion-icon  (click)="tog(data['approval_id'],i,'1')" *ngIf="data['toggle']" name="caret-down-outline"></ion-icon> -->
+                  <ion-icon  name="caret-down-outline"></ion-icon>
+                  </span>
+            </ion-col>
+           </ion-row>
+
+
+
+
+               <div  style="border-bottom: 1px solid lightgrey;" *ngIf="data['toggle']" >
+
+
+
+
+                 <ion-row >
+                  <ion-col size="1">
+
+                  </ion-col>
+                  <ion-col size="3">
+                    <ion-row style="color: #180e61;font-weight: bold;">Design</ion-row>
+                    <ion-row style="color: black;">{{data.design_name}}</ion-row>
+                  </ion-col>
+                   <ion-col size="4">
+                     <ion-row style="color: #180e61;font-weight: bold;">Sub.Des</ion-row>
+                     <ion-row style="color: black;"> {{data.sub_design_name}}</ion-row>
+                   </ion-col>
+                   <ion-col size="4">
+                     <ion-row style="color: #180e61;font-weight: bold;"> Kar.Cal.Typ</ion-row>
+                     <ion-row style="color: black;"> {{data.karigar_calc_type_name}}</ion-row>
+                   </ion-col>
+
+                 </ion-row>
+
+                 <ion-row >
+                  <ion-col size="1">
+
+                  </ion-col>
+                  <ion-col size="3">
+                    <ion-row style="color: #180e61;font-weight: bold;">VA.Wt</ion-row>
+                    <ion-row style="color: black;">{{data.wastage_wt}}</ion-row>
+                  </ion-col>
+
+                   <ion-col size="4">
+                     <ion-row style="color: #180e61;font-weight: bold;">VA.Typ</ion-row>
+                     <ion-row style="color: black;"> {{data.wastage_type_name}}</ion-row>
+                   </ion-col>
+                   <ion-col size="4">
+                     <ion-row style="color: #180e61;font-weight: bold;">VA(%)</ion-row>
+                     <ion-row style="color: black;">{{data.wastage_percentage}}</ion-row>
+                   </ion-col>
+                 </ion-row>
+
+                 <ion-row >
+                  <ion-col size="1">
+
+                  </ion-col>
+
+                   <ion-col size="3">
+                     <ion-row style="color: #180e61;font-weight: bold;">Mc.Typ</ion-row>
+                     <ion-row style="color: black;">{{data.type}}</ion-row>
+                   </ion-col>
+                   <ion-col size="4">
+                     <ion-row style="color: #180e61;font-weight: bold;">Mc.Val</ion-row>
+                     <ion-row style="color: black;">{{data.mc_value}} </ion-row>
+                   </ion-col>
+                   <ion-col size="4">
+                    <ion-row style="color: #180e61;font-weight: bold;">Cal.Typ</ion-row>
+                    <ion-row style="color: black;">{{data.calc_type_name}}</ion-row>
+                  </ion-col>
+                 </ion-row>
+
+                 <ion-row >
+                  <ion-col size="1">
+
+                  </ion-col>
+
+                   <ion-col size="3">
+                     <ion-row style="color: #180e61;font-weight: bold;">Stn.Cal.typ</ion-row>
+                     <ion-row style="color: black;">{{data.stone_cal_type_name}}</ion-row>
+                   </ion-col>
+                   <ion-col size="4">
+                     <ion-row style="color: #180e61;font-weight: bold;">UOM</ion-row>
+                     <ion-row style="color: black;">{{data.uom_name}} </ion-row>
+                   </ion-col>
+                   <ion-col size="4">
+                    <ion-row style="color: #180e61;font-weight: bold;">QC</ion-row>
+                    <ion-row style="color: black;">{{data.quality_name}}</ion-row>
+                  </ion-col>
+                 </ion-row>
+
+                 <ion-row >
+                  <ion-col size="1">
+
+                  </ion-col>
+
+                   <ion-col size="3">
+                     <ion-row style="color: #180e61;font-weight: bold;">Frm.Cent</ion-row>
+                     <ion-row style="color: black;">{{data.from_wt}}</ion-row>
+                   </ion-col>
+                   <ion-col size="4">
+                     <ion-row style="color: #180e61;font-weight: bold;">To.Cent</ion-row>
+                     <ion-row style="color: black;">{{data.to_wt}} </ion-row>
+                   </ion-col>
+                   <ion-col size="4">
+                    <ion-row style="color: #180e61;font-weight: bold;">Rate</ion-row>
+                    <ion-row style="color: black;">{{data.rate_per_gram}}</ion-row>
+                  </ion-col>
+                 </ion-row>
+
+
+             </div>
+
+
+
+
+            </ion-card-content>
+
+            <!-- <ion-col col-4>Inactive (Ac) - {{cus_detail.inactive_acount}}</ion-col> -->
+
+         </ion-card>
+
+         <ion-card *ngIf="type === 'Stone'" style="
+         box-shadow: rgba(50, 50, 105, 0.15) 0px 2px 5px 0px, rgba(0, 0, 0, 0.05) 0px 1px 1px 0px;width: 100%;margin-top: 1px;">
+         <ion-card-content style="
+         font-size: 13px;
+         line-height:2;padding: 5px;">
+           <ion-row>
+            <ion-col size="6" align="start">
+              <ion-row style="color: #180e61;font-weight: bold;">
+                Karigar - {{data.karigar}}
+              </ion-row>
+            </ion-col>
+            <ion-col size="6" align="end">
+              <ion-badge style="font-size: 12px !important;" [ngClass]="data.status === '0' ? 'yet_approve' :'' || data.status === '3' ? 'hold' :'' " >{{data.stone_status}}</ion-badge>
+                </ion-col>
+          </ion-row>
+        <ion-row>
+         <ion-col size="1">
+           <ion-row>
+           <ion-checkbox (ionChange)="selected_data(data, $event)"></ion-checkbox>
+           </ion-row>
+         </ion-col>
+         <ion-col size="3">
+          <ion-row style="color: #180e61;font-weight: bold;">
+            Stone.Typ
+           </ion-row>
+           <ion-row style="color: black;">
+             {{data.stone_type}}
+           </ion-row>
+         </ion-col>
+         <ion-col size="4">
+          <ion-row style="color: #180e61;font-weight: bold;">
+            Stone.Nam
+           </ion-row>
+           <ion-row style="color: black;">
+             {{data.stone_name}}
+           </ion-row>
+         </ion-col>
+         <ion-col size="4">
+          <ion-row style="color: #180e61;font-weight: bold;">
+            Company
+          </ion-row>
+          <ion-row style="color: black;">
+            {{data.company}}
+          </ion-row>
+         </ion-col>
+        </ion-row>
+        <ion-row>
+         <ion-col size="1">
+         </ion-col>
+         <ion-col size="3">
+          <ion-row style="color: #180e61;font-weight: bold;">
+            UOM
+          </ion-row>
+          <ion-row style="color: black;">
+            {{data.uom_name}}
+          </ion-row>
+         </ion-col>
+         <ion-col size="4">
+          <ion-row style="color: #180e61;font-weight: bold;">
+            Calc.Typ
+           </ion-row>
+           <ion-row style="color: black;">
+             {{data.stn_cal_type}}
+           </ion-row>
+         </ion-col>
+         <ion-col size="4">
+          <ion-row style="color: #180e61;font-weight: bold;">
+          Employee
+          </ion-row>
+          <ion-row style="color: black;">
+            {{data.created_by}}
+          </ion-row>
+        </ion-col>
+
+
+        </ion-row>
+        <ion-row>
+          <ion-col size="1"></ion-col>
+
+          <ion-col size="7" style="color: #180e61;font-weight: bold;">
+            Date-{{data.created_on}}
+          </ion-col>
+          <ion-col size="4">
+            <span  (click)="tog(data['approval_id'],i,'1')" *ngIf="data['toggle']" style="color: black;"> view more
+              <ion-icon   name="caret-up-outline" ></ion-icon>
+              <!-- <ion-icon (click)="tog(data['approval_id'],i,'2')" *ngIf="!data['toggle']"  name="caret-up-outline"></ion-icon> -->
+              </span>
+              <span  (click)="tog(data['approval_id'],i,'2')" *ngIf="!data['toggle']" style="color: black;"> view more
+                <!-- <ion-icon  (click)="tog(data['approval_id'],i,'1')" *ngIf="data['toggle']" name="caret-down-outline"></ion-icon> -->
+                <ion-icon  name="caret-down-outline"></ion-icon>
+                </span>
+           </ion-col>
+        </ion-row>
+
+
+
+            <div  style="border-bottom: 1px solid lightgrey;" *ngIf="data['toggle']" >
+
+
+
+
+              <ion-row >
+
+                <ion-col size="1">
+                </ion-col>
+                <ion-col size="3" >
+                  <ion-row style="color: #180e61;font-weight: bold;">From.Wt</ion-row>
+                  <ion-row style="color: black;font-size: 12px;"> {{data.from_wt}}</ion-row>
+                </ion-col>
+                <ion-col size="4">
+                  <ion-row style="color: #180e61;font-weight: bold;"> To.Wt</ion-row>
+                  <ion-row style="color: black;font-size: 12px;"> {{data.to_wt}}</ion-row>
+                </ion-col>
+                <ion-col size="4">
+                  <ion-row style="color: #180e61;font-weight: bold;">QC.code</ion-row>
+                  <ion-row style="color: black;font-size: 12px;">{{data.quality_code}}</ion-row>
+                </ion-col>
+              </ion-row>
+
+              <ion-row >
+                <ion-col size="1">
+                </ion-col>
+                <ion-col size="3">
+                  <ion-row style="color: #180e61;font-weight: bold;">Clarity</ion-row>
+                  <ion-row style="color: black;font-size: 12px;">{{data.clarity}}</ion-row>
+                </ion-col>
+                <ion-col size="4">
+                  <ion-row style="color: #180e61;font-weight: bold;">Clr</ion-row>
+                  <ion-row style="color: black;font-size: 12px;"> {{data.color}}</ion-row>
+                </ion-col>
+                <ion-col size="4">
+                  <ion-row style="color: #180e61;font-weight: bold;">Cut</ion-row>
+                  <ion-row style="color: black;font-size: 12px;">{{data.cut}}</ion-row>
+                </ion-col>
+              </ion-row>
+
+              <ion-row >
+                <ion-col size="1">
+                </ion-col>
+                <ion-col size="3">
+                  <ion-row style="color: #180e61;font-weight: bold;">Shape</ion-row>
+                  <ion-row style="color: black;font-size: 12px;">{{data.shape}}</ion-row>
+                </ion-col>
+                <ion-col size="4">
+                    <ion-row style="color: #180e61;font-weight: bold;">Stn.Rate</ion-row>
+                    <ion-row style="color: black;font-size: 12px;">₹{{data.stn_rate}}</ion-row>
+                </ion-col>
+                <ion-col size="4">
+
+                </ion-col>
+              </ion-row>
+
+
+              <!-- <ion-row style="background: lightskyblue;">
+               <ion-col>
+                 <ion-row>VA.Wt</ion-row>
+                 <ion-row style="color: black;font-size: 14px;">{{data.wastage_wt}}</ion-row>
+               </ion-col>
+               <ion-col>
+                 <ion-row>Mc.Typ</ion-row>
+                 <ion-row style="color: black;font-size: 14px;">{{data.mc_type}}</ion-row>
+               </ion-col>
+               <ion-col>
+                 <ion-row>Mc.Val</ion-row>
+                 <ion-row style="color: black;font-size: 14px;">{{data.mc_value}} </ion-row>
+               </ion-col>
+             </ion-row> -->
+
+
+
+
+
+          </div>
+
+
+
+
+         </ion-card-content>
+
+         <!-- <ion-col col-4>Inactive (Ac) - {{cus_detail.inactive_acount}}</ion-col> -->
+
+      </ion-card>
+
+          </ion-item>
+
+        </ion-item-sliding>
+      </ion-list>
+
+      <div style="margin-top: -16px;text-align: center;height: 270px !important;" *ngIf="responsedata.length === 0 " >
+        <img style="width: 100% !important;" src='assets/empty.jpg'/>
+       </div>
+    </div>
+
+
+
+</ion-content>
+
+
+<ion-footer *ngIf="option === 'Rate' && responsedata.length !== 0 && approvebill_data.length !==0" >
+  <ion-row style="height: 45px;">
+    <ion-col col-6 style="text-align: center;
+   border-right: 2px solid #eee;background-color: #2fdf75;"  (click)="presentAlert('Confirm Submitted','1')">
+   <div style="margin-top: 5px;">
+    Approved
+   </div> </ion-col>
+    <ion-col col-6 style="text-align: center;
+   ;background-color: #e12020;"  (click)="presentAlert('Confirm Cancel','2')">
+   <div style="margin-top: 5px;">
+      Cancel
+   </div> </ion-col>
+
+  </ion-row>
+  </ion-footer>
+
+  <ion-footer *ngIf="option === 'Kariger'&& responsedata.length !== 0 && approvebill_data.length !==0" >
+    <ion-row style="height: 45px;">
+      <ion-col col-4 style="text-align: center;
+     border-right: 2px solid #eee;background-color: #2fdf75;"  (click)="presentAlert('Confirm Submitted','1')">
+     <div style="margin-top: 5px;">
+      Approved
+     </div> </ion-col>
+     <ion-col col-4 style="text-align: center;
+     ;background-color: #f1ef58; border-right: 2px solid #eee;" (click)="presentAlert('Confirm Hold','3')"  >
+     <div style="margin-top: 5px;">
+        Hold
+     </div> </ion-col>
+      <ion-col col-4 style="text-align: center;
+     ;background-color: #e12020;" (click)="presentAlert('Confirm Rejected','2')" >
+     <div style="margin-top: 5px;">
+        Rejected
+     </div> </ion-col>
+
+    </ion-row>
+    </ion-footer>
+
+
+
+
+
+

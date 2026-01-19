@@ -1,0 +1,428 @@
+<ion-header [translucent]="true">
+  <ion-toolbar>
+    <ion-title> <ion-icon name="arrow-back-outline" (click)="openpage()"></ion-icon>
+      <span>Stock Chart View</span></ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content [fullscreen]="true">
+  <ion-toolbar >
+      <ion-segment scrollable="true" style="background-color: #f4f5f8;" [(ngModel)]="esti_type" (ionChange)="change_option()" >
+        <ion-segment-button style="font-size: 11px;" *ngFor="let option of types" value="{{ option.approval_type }}">
+          <ion-label>{{ option.approval_name }}</ion-label>
+        </ion-segment-button>
+
+      </ion-segment>
+
+  </ion-toolbar>
+<div *ngIf="esti_type === '1'">
+<div style="padding: 11px 2px 11px 10px;" *ngIf="branch_list1 !== undefined && branch_list1 !== '' ">
+<ion-row style="margin-top: -22px;">
+<ion-col col-8>
+  <h1 style="font-weight: bold;font-size:14px !important;;">{{branch_name}}</h1>
+<!--   <ion-chip style="    background: #f4f5f8;
+  margin-left: -6px;
+  font-size: 11px;">
+     <ion-label  id="popover1" >{{day['Stock_Chart']}}</ion-label>
+    <ion-icon  name="calendar" style="font-size: 13px;" id="popover-button5" ></ion-icon>
+  </ion-chip>
+
+  <ion-popover trigger="popover1" class="custom-popover">
+    <ng-template>
+      <div style="text-align: center;">
+        <ion-item [button]="true" style="font-size: 12px;margin-top: -6px;" (click)="get_date('today','1'); closePopover()" lines="none" >today</ion-item>
+        <ion-item [button]="true" style="font-size: 12px;margin-top: -18px" (click)="get_date('yest','1'); closePopover()"  lines="none">yesterday</ion-item>
+        <ion-item [button]="true" style="font-size: 12px;margin-top: -18px;" (click)="get_date('month','1'); closePopover()" lines="none" >Last Month</ion-item>
+      </div>
+
+    </ng-template>
+  </ion-popover> -->
+
+  <ion-popover trigger="popover-button9"  >
+    <ng-template>
+      <ion-row>
+        <ion-col col-6>
+          <ion-label style="font-size: 12px;">From</ion-label>
+          <ion-datetime-button   presentation="date"  displayFormat="YYYY-MM-DD" datetime="from_date['Stock_Chart']"></ion-datetime-button>
+        <ion-modal  [keepContentsMounted]="true">
+          <ng-template>
+            <ion-datetime show-default-buttons="true" presentation="date" (ionChange)="onDateChange_from('stock_chart')"    [(ngModel)]="from_date['Stock_Chart']"   id="from_date['Stock_Chart']"></ion-datetime>
+          </ng-template>
+        </ion-modal>
+      </ion-col>
+      <ion-col col-6>
+        <ion-label  style="font-size: 12px;">To</ion-label>
+        <ion-datetime-button  presentation="date"  displayFormat="DD-MM-YYYY" datetime="to_date['Stock_Chart']"></ion-datetime-button>
+        <ion-modal  [keepContentsMounted]="true">
+          <ng-template>
+            <ion-datetime show-default-buttons="true" presentation="date" (ionChange)="onDateChange_from('stock_chart')"    [(ngModel)]="to_date['Stock_Chart']"   id="to_date['Stock_Chart']"></ion-datetime>
+          </ng-template>
+        </ion-modal>
+      </ion-col>
+      </ion-row>
+    </ng-template>
+  </ion-popover>
+
+
+
+
+
+
+
+</ion-col>
+<ion-col col-4 style="    text-align: end;
+margin-right: 22px;
+margin-top: 16px;">
+
+  <ion-icon name="ellipsis-horizontal" style="font-size: 20px;"  (click)="openModal(1)" ></ion-icon>
+<!-- <ion-popover trigger="popover-button6" [dismissOnSelect]="true"  class="custom-popover">
+  <ng-template>
+    <ion-item [button]="true" style="font-size: 12px;margin-top: -6px;" (click)="openModal(1)" lines="none" >Branch</ion-item>
+    <ion-item [button]="true" style="font-size: 12px;margin-top: -18px" (click)="openModal(2)"  lines="none">Metal</ion-item>
+  </ng-template>
+</ion-popover> -->
+</ion-col>
+        </ion-row>
+        <ion-row>
+          <!-- <ion-col col-12 style="display: flex;">
+            <div style="border: 1px solid aliceblue;
+            width: 29px;
+            text-align: center;
+            height: 31px;
+            border-radius: 32px;
+            margin-left: -6px;
+            margin-top: 5px;
+            background: aliceblue;"> <ion-icon  name="calendar" style="margin-top: 8px;
+              color: #3a7be0;" id="popover-button9"  ></ion-icon></div> -->
+              <ion-col col-12 style="display: -webkit-box;margin-right: 10px;"  class="scrollmenu_but22">
+                <ion-chip [color]="'primary'"  style="font-size: 11px;margin-left: 8px;height: 1px;"  id="popover-button9" >
+                  <span style="text-align: center;">Date</span></ion-chip>
+            <ion-chip [color]="day['Stock_Chart'] === 'today' ? 'primary' : color_mode" style="font-size: 11px;margin-left: 8px;height: 1px;" (click)="get_date('today','1')">
+              <span style="text-align: center;">Today</span></ion-chip>
+            <ion-chip [color]="day['Stock_Chart'] === 'yesterday' ? 'secondary' : color_mode" style="font-size: 11px;height: 1px;" (click)="get_date('yest','1')"><span style="text-align: center;">
+              Yesterday
+            </span></ion-chip>
+            <ion-chip [color]="day['Stock_Chart'] === 'This Month' ? 'success' : color_mode" style="font-size: 11px;height: 1px;" (click)="get_date('this_month','1')"><span style="text-align: center;">
+              This Month
+             </span> </ion-chip>
+            <ion-chip [color]="day['Stock_Chart'] === 'Last Month' ? 'tertiary' : color_mode" style="font-size: 11px;height: 1px;" (click)="get_date('month','1')"><span style="text-align: center;">
+             Last Month
+            </span> </ion-chip>
+          </ion-col>
+        </ion-row>
+
+      <div style="margin-top: 34px;" *ngIf="bbpiexValues.length !== 0 && bbpieyValues.length !== 0">
+        <div *ngIf="bbpiexValues!== undefined || bbpieyValues!== undefined" style="margin-left: -25px;"> <!-- *ngIf="bpiexValues!== undefined || bpieyValues!== undefined" -->
+          <apx-chart
+            [chart]="stockchart.chart"
+            [series]="stockchart.series"
+            [labels]="stockchart.labels"
+            [grid]="stockchart.grid"
+            [title]="stockchart.title"
+            [legend]="stockchart.legend"
+            [dataLabels]="stockchart.dataLabels"
+            [colors]="stockchart.colors"
+          ></apx-chart>
+
+        </div>
+
+        <div class="scrollmenu" style="
+        margin-top: 17px;
+        margin-right: 5px;">
+
+          <ion-card *ngFor="let t of zvalues;let i = index" [ngStyle]="{'background': bbpiebarColors[i]}"  style="margin: 12px 8px 20px 3px;border-radius: 5px; text-align: center;height: 8vh">
+              <ion-card-header style="font-size: 12px;margin-top: -8px;color: white;">
+                {{t.product_name}}
+              </ion-card-header>
+              <ion-card-content style="font-weight: 300;text-align: center;
+              margin-top: -15px;color: white;">
+                {{t.stock_wt}} / {{t.stock_pcs}} pcs
+
+              </ion-card-content>
+          </ion-card>
+            <!-- <button  *ngFor="let t of xvalues;let i = index"  ion-button>
+                {{t.name}}
+                {{t.percent}}
+            </button> -->
+           </div>
+
+
+
+</div>
+<div style="margin-top: -16px;text-align: center;height: 270px !important;" *ngIf="bbpiexValues.length === 0 && bbpieyValues.length === 0" >
+  <img style="width: 100% !important;" src='assets/empty.jpg'/>
+ </div>
+    </div>
+</div>
+ <div *ngIf="esti_type === '2'">
+<div style="padding: 11px 2px 11px 10px;" *ngIf="branch_list1 !== undefined && branch_list1 !== '' ">
+
+  <ion-row style="margin-top: -22px;">
+    <ion-col col-8>
+      <h1 style="font-weight: bold;font-size:14px !important;;">{{esti_branch}}</h1>
+<!--       <ion-chip style="    background: #f4f5f8;
+      margin-left: -6px;
+      font-size: 11px;">
+          <ion-label  id="popover0" >{{day['Estimation_branch']}}</ion-label>
+        <ion-icon  name="calendar" style="font-size: 13px;" id="popover-button5" ></ion-icon>
+      </ion-chip>
+
+      <ion-popover trigger="popover0" class="custom-popover">
+        <ng-template>
+          <div style="text-align: center;">
+            <ion-item [button]="true" style="font-size: 12px;margin-top: -6px;" (click)="get_date('today','2'); closePopover()" lines="none" >today</ion-item>
+            <ion-item [button]="true" style="font-size: 12px;margin-top: -18px" (click)="get_date('yest','2'); closePopover()"  lines="none">yesterday</ion-item>
+            <ion-item [button]="true" style="font-size: 12px;margin-top: -18px;" (click)="get_date('month','2'); closePopover()" lines="none" >Last Month</ion-item>
+          </div>
+
+        </ng-template>
+      </ion-popover> -->
+
+      <ion-popover trigger="popover-button10"  >
+        <ng-template>
+          <ion-row>
+            <ion-col col-6>
+              <ion-label style="font-size: 12px;">From</ion-label>
+              <ion-datetime-button   presentation="date"  displayFormat="YYYY-MM-DD" datetime="from_date['Estimation']"></ion-datetime-button>
+            <ion-modal  [keepContentsMounted]="true">
+              <ng-template>
+                <ion-datetime show-default-buttons="true" presentation="date" (ionChange)="onDateChange_from('Estimation')"    [(ngModel)]="from_date['Estimation']"   id="from_date['Estimation']"></ion-datetime>
+              </ng-template>
+            </ion-modal>
+          </ion-col>
+          <ion-col col-6>
+            <ion-label  style="font-size: 12px;">To</ion-label>
+            <ion-datetime-button  presentation="date"  displayFormat="DD-MM-YYYY" datetime="to_date['Estimation']"></ion-datetime-button>
+            <ion-modal  [keepContentsMounted]="true">
+              <ng-template>
+                <ion-datetime show-default-buttons="true" presentation="date" (ionChange)="onDateChange_from('Estimation')"    [(ngModel)]="to_date['Estimation']"   id="to_date['Estimation']"></ion-datetime>
+              </ng-template>
+            </ion-modal>
+          </ion-col>
+          </ion-row>
+        </ng-template>
+      </ion-popover>
+
+    </ion-col>
+    <ion-col col-4 style="text-align: end;
+    margin-right: 22px;
+    margin-top: 16px;">
+
+      <ion-icon name="ellipsis-horizontal" style="font-size: 20px;"  (click)="openModal(2)" ></ion-icon>
+    <!-- <ion-popover trigger="popover-button6" [dismissOnSelect]="true"  class="custom-popover">
+      <ng-template>
+        <ion-item [button]="true" style="font-size: 12px;margin-top: -6px;" (click)="openModal(1)" lines="none" >Branch</ion-item>
+        <ion-item [button]="true" style="font-size: 12px;margin-top: -18px" (click)="openModal(2)"  lines="none">Metal</ion-item>
+      </ng-template>
+    </ion-popover> -->
+    </ion-col>
+
+
+            </ion-row>
+
+            <ion-row>
+              <!-- <ion-col col-12 style="display: flex;">
+                <div style="border: 1px solid aliceblue;
+                width: 29px;
+                text-align: center;
+                height: 31px;
+                border-radius: 32px;
+                margin-left: -6px;
+                margin-top: 5px;
+                background: aliceblue;"> <ion-icon  name="calendar" style="margin-top: 8px;
+                  color: #3a7be0;" id="popover-button10"  ></ion-icon></div> -->
+                  <ion-col col-12 style="display: -webkit-box;margin-right: 10px;"  class="scrollmenu_but22">
+                    <ion-chip [color]="'primary'"  style="font-size: 11px;margin-left: 8px;height: 1px;"  id="popover-button10" >
+                      <span style="text-align: center;">Date</span></ion-chip>
+                <ion-chip [color]="day['Estimation_branch'] === 'today' ? 'primary' : color_mode" style="font-size: 11px;margin-left: 8px;height: 1px;" (click)="get_date('today','2')">
+                  <span style="text-align: center;">Today</span></ion-chip>
+                <ion-chip [color]="day['Estimation_branch'] === 'yesterday' ? 'secondary' : color_mode" style="font-size: 11px;height: 1px;" (click)="get_date('yest','2')"><span style="text-align: center;">
+                  Yesterday
+                </span></ion-chip>
+                <ion-chip [color]="day['Estimation_branch'] === 'This Month' ? 'success' : color_mode" style="font-size: 11px;height: 1px;" (click)="get_date('this_month','2')"><span style="text-align: center;">
+                  This Month
+                 </span> </ion-chip>
+                <ion-chip [color]="day['Estimation_branch'] === 'Last Month' ? 'tertiary' : color_mode" style="font-size: 11px;height: 1px;" (click)="get_date('month','2')"><span style="text-align: center;">
+                 Last Month
+                </span> </ion-chip>
+              </ion-col>
+            </ion-row>
+
+
+  <div style="margin-top: -16px" *ngIf="barxValues.length !== 0 && baryValues.length !== 0">
+
+    <div id="chart"  style="margin-left: -12px;margin-top: 10px;"> <!-- *ngIf="bpiexValues!== undefined || bpieyValues!== undefined" -->
+       <apx-chart
+
+      [series]="Estimation.series"
+      [chart]="Estimation.chart"
+      [dataLabels]="Estimation.dataLabels"
+      [plotOptions]="Estimation.plotOptions"
+      [yaxis]="Estimation.yaxis"
+      [xaxis]="Estimation.xaxis"
+      [fill]="Estimation.fill"
+      [legend]="Estimation.legend"
+      [colors]="Estimation.colors"
+      [grid]="Estimation.grid"
+    ></apx-chart>
+
+    </div>
+
+    <div class="scrollmenu_but">
+      <button *ngFor="let t of barxValues;let i = index" [ngStyle]="{'background': barbarColors[i]}" ion-button> {{t.name}}</button>
+
+      </div>
+  </div>
+
+  <div style="margin-top: -16px;text-align: center;height: 270px !important;" *ngIf="barxValues.length === 0 && baryValues.length === 0" >
+    <img style="width: 100% !important;" src='assets/empty.jpg'/>
+   </div>
+</div>
+
+
+    </div>
+
+  <div *ngIf="esti_type === '3'">
+    <div style="padding: 11px 2px 11px 10px;" *ngIf="branch_list1 !== undefined && branch_list1 !== '' ">
+
+      <ion-row style="margin-top: -22px;">
+        <ion-col col-8>
+          <h1 style="font-weight: bold;font-size:14px !important;;">{{branch_compare}}</h1>
+<!--           <ion-chip style="    background: #f4f5f8;
+          margin-left: -6px;
+          font-size: 11px;">
+             <ion-label  id="popover3">{{day['BranchWiseCompersion']}}</ion-label>
+
+            <ion-icon  name="calendar" style="font-size: 13px;" id="popover-button5" ></ion-icon>
+          </ion-chip>
+
+          <ion-popover trigger="popover3" class="custom-popover">
+            <ng-template>
+              <div style="text-align: center;">
+                <ion-item [button]="true" style="font-size: 12px;margin-top: -6px;" (click)="get_date('today','3'); closePopover()" lines="none" >today</ion-item>
+                <ion-item [button]="true" style="font-size: 12px;margin-top: -18px" (click)="get_date('yest','3'); closePopover()"  lines="none">yesterday</ion-item>
+                <ion-item [button]="true" style="font-size: 12px;margin-top: -18px;" (click)="get_date('month','3'); closePopover()" lines="none" >Last Month</ion-item>
+              </div>
+
+            </ng-template>
+          </ion-popover> -->
+
+          <ion-popover trigger="popover-button11">
+            <ng-template>
+              <ion-row>
+                <ion-col col-6>
+                  <ion-label style="font-size: 12px;">From</ion-label>
+                  <ion-datetime-button   presentation="date"  displayFormat="YYYY-MM-DD" datetime="from_date['BranchWiseCompersion']"></ion-datetime-button>
+                <ion-modal  [keepContentsMounted]="true">
+                  <ng-template>
+                    <ion-datetime show-default-buttons="true" presentation="date" (ionChange)="onDateChange_from('BranchWiseCompersion')"    [(ngModel)]="from_date['BranchWiseCompersion']"   id="from_date['BranchWiseCompersion']"></ion-datetime>
+                  </ng-template>
+                </ion-modal>
+              </ion-col>
+              <ion-col col-6>
+                <ion-label  style="font-size: 12px;">To</ion-label>
+                <ion-datetime-button  presentation="date"  displayFormat="DD-MM-YYYY" datetime="to_date['BranchWiseCompersion']"></ion-datetime-button>
+                <ion-modal  [keepContentsMounted]="true">
+                  <ng-template>
+                    <ion-datetime show-default-buttons="true" presentation="date" (ionChange)="onDateChange_from('BranchWiseCompersion')"    [(ngModel)]="to_date['BranchWiseCompersion']"   id="to_date['BranchWiseCompersion']"></ion-datetime>
+                  </ng-template>
+                </ion-modal>
+              </ion-col>
+              </ion-row>
+            </ng-template>
+          </ion-popover>
+
+        </ion-col>
+        <ion-col col-4 style="text-align: end;
+        margin-right: 22px;
+        margin-top: 16px;">
+
+          <ion-icon name="ellipsis-horizontal" style="font-size: 20px;"  (click)="openModal(3)" ></ion-icon>
+        <!-- <ion-popover trigger="popover-button6" [dismissOnSelect]="true"  class="custom-popover">
+          <ng-template>
+            <ion-item [button]="true" style="font-size: 12px;margin-top: -6px;" (click)="openModal(1)" lines="none" >Branch</ion-item>
+            <ion-item [button]="true" style="font-size: 12px;margin-top: -18px" (click)="openModal(2)"  lines="none">Metal</ion-item>
+          </ng-template>
+        </ion-popover> -->
+        </ion-col>
+                </ion-row>
+
+                <ion-row>
+                  <!-- <ion-col col-12 style="display: flex;">
+                    <div style="border: 1px solid aliceblue;
+                    width: 29px;
+                    text-align: center;
+                    height: 31px;
+                    border-radius: 32px;
+                    margin-left: -6px;
+                    margin-top: 5px;
+                    background: aliceblue;"> <ion-icon  name="calendar" style="margin-top: 8px;
+                      color: #3a7be0;" id="popover-button11"  ></ion-icon></div> -->
+                      <ion-col col-12 style="display: -webkit-box;margin-right: 10px;"  class="scrollmenu_but22">
+                        <ion-chip [color]="'primary'"  style="font-size: 11px;margin-left: 8px;height: 1px;"  id="popover-button11" >
+                          <span style="text-align: center;">Date</span></ion-chip>
+                    <ion-chip [color]="day['BranchWiseCompersion'] === 'today' ? 'primary' : color_mode" style="font-size: 11px;margin-left: 8px;height: 1px;" (click)="get_date('today','3')">
+                      <span style="text-align: center;">Today</span></ion-chip>
+                    <ion-chip [color]="day['BranchWiseCompersion'] === 'yesterday' ? 'secondary' : color_mode" style="font-size: 11px;height: 1px;" (click)="get_date('yest','3')"><span style="text-align: center;">
+                      Yesterday
+                    </span></ion-chip>
+                    <ion-chip [color]="day['BranchWiseCompersion'] === 'This Month' ? 'success' : color_mode" style="font-size: 11px;height: 1px;" (click)="get_date('this_month','3')"><span style="text-align: center;">
+                      This Month
+                     </span> </ion-chip>
+                    <ion-chip [color]="day['BranchWiseCompersion'] === 'Last Month' ? 'tertiary' : color_mode" style="font-size: 11px;height: 1px;" (click)="get_date('month','3')"><span style="text-align: center;">
+                     Last Month
+                    </span> </ion-chip>
+                  </ion-col>
+                </ion-row>
+
+    <div style="margin-top: -16px" *ngIf="bar2xValues.length !== 0 && bar2yValues.length !== 0">
+
+      <div id="chart"  *ngIf="bar2xValues!== undefined || bar2yValues!== undefined" style="margin-left: -12px;margin-top: 10px;"> <!-- *ngIf="bpiexValues!== undefined || bpieyValues!== undefined" -->
+         <apx-chart
+
+        [series]="chartOptions1.series"
+        [chart]="chartOptions1.chart"
+        [dataLabels]="chartOptions1.dataLabels"
+        [plotOptions]="chartOptions1.plotOptions"
+        [yaxis]="chartOptions1.yaxis"
+        [xaxis]="chartOptions1.xaxis"
+        [fill]="chartOptions1.fill"
+        [legend]="chartOptions1.legend"
+        [colors]="chartOptions1.colors"
+        [grid]="chartOptions1.grid"
+      ></apx-chart>
+
+      </div>
+
+      <div class="scrollmenu_but">
+        <button *ngFor="let t of bar2xValues;let i = index" [ngStyle]="{'background': bar2barColors[i]}" ion-button> {{t.name}}</button>
+
+        </div>
+        <ion-row style="white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        margin-top: 10px;">
+          <ion-col *ngFor="let item of items ; let idx = index" col-12>
+
+              <ion-checkbox color="primary" style="margin-right: 10px" [(ngModel)]="items[idx]['status']" (ngModelChange)="gett(item,idx)"></ion-checkbox>
+              <ion-label >{{item['name']}}</ion-label>
+
+          </ion-col>
+        </ion-row>
+
+
+      </div>
+
+      <div style="margin-top: -16px;text-align: center;height: 270px !important;" *ngIf="bar2xValues.length === 0 && bar2yValues.length === 0" >
+        <img style="width: 100% !important;" src='assets/empty.jpg'/>
+       </div>
+
+    </div>
+  </div>
+
+
+</ion-content>
+
+
+
+

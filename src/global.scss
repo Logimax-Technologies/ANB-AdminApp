@@ -1,0 +1,67 @@
+/*
+ * App Global CSS
+ * ----------------------------------------------------------------------------
+ * Put style rules here that you want to apply globally. These styles are for
+ * the entire app and not just one component. Additionally, this file can be
+ * used as an entry point to import other CSS/Sass files to be included in the
+ * output CSS.
+ * For more information on global stylesheets, visit the documentation:
+ * https://ionicframework.com/docs/layout/global-stylesheets
+ */
+
+/* Core CSS required for Ionic components to work properly */
+@import "@ionic/angular/css/core.css";
+
+/* Basic CSS for apps built with Ionic */
+@import "@ionic/angular/css/normalize.css";
+@import "@ionic/angular/css/structure.css";
+@import "@ionic/angular/css/typography.css";
+@import "@ionic/angular/css/display.css";
+
+/* Optional CSS utils that can be commented out */
+@import "@ionic/angular/css/padding.css";
+@import "@ionic/angular/css/float-elements.css";
+@import "@ionic/angular/css/text-alignment.css";
+@import "@ionic/angular/css/text-transformation.css";
+@import "@ionic/angular/css/flex-utils.css";
+
+.ios {
+  ion-header {
+    ion-title {
+      padding-inline-start: 0;
+      padding-inline-end: 0;
+      text-align: left !important;
+      margin-left: 10px;
+
+    }
+  }
+}
+
+.custom-textarea textarea {
+  border: 1px solid #120e0e  ; /* Add your desired border styles */
+  border-radius: 5px; /* Add border-radius for rounded corners, if needed */
+  padding: 8px; /* Adjust padding as needed */
+}
+
+.custom-alert {
+  --ion-alert-padding: 16px; /* Adjust padding as needed */
+}
+
+.custom-alert .alert-wrapper .alert-message .alert-input input {
+  border: 1px solid #120e0e !important; /* Add your desired border styles */
+  border-radius: 5px; /* Add border-radius for rounded corners, if needed */
+  padding: 8px; /* Adjust padding as needed */
+}
+
+
+:root {
+  --ion-font-family: 'Lexend', sans-serif;
+
+}
+
+body {
+  font-family: var(--ion-font-family) !important;
+}
+
+
+

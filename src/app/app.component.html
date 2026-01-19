@@ -1,0 +1,51 @@
+<ion-app>
+  <ion-split-pane contentId="main-content">
+    <ion-menu   contentId="main-content"  *ngIf="menu_hide">
+      <ion-header>
+        <ion-toolbar>
+          <ion-row>
+            <ion-col col-12 style="text-align: center;">
+              <img  class="header-logo" src='assets/header-final.svg'/>
+            </ion-col>
+          </ion-row>
+        </ion-toolbar>
+    </ion-header>
+      <ion-content>
+        <ion-list id="inbox-list" style="margin-top: -28px ">
+          <ion-menu-toggle auto-hide="false" *ngFor="let p of pages; let i = index" >
+            <div *ngIf="p.show === 0 && p.show_in_dash === '1'">
+              <ion-item (click)="openpage(p.title)"  lines="none" detail="false" routerLinkActive="selected">
+                <ion-icon aria-hidden="true" slot="start" [ios]="p.icon + '-outline'"  [md]="p.icon +'-outline'"></ion-icon>
+                <ion-label>{{ p.title }}</ion-label>
+              </ion-item>
+            </div>
+          </ion-menu-toggle>
+        </ion-list>
+      </ion-content>
+
+      <ion-footer translucent="true" no-lines align="center">
+        <ion-toolbar>
+          <ion-title style="font-size: smaller;font-weight: bold;">Current Version ( {{maintain_ver}} )</ion-title>
+        </ion-toolbar>
+      </ion-footer>
+
+
+    </ion-menu>
+    <ion-router-outlet id="main-content"></ion-router-outlet>
+  </ion-split-pane>
+
+</ion-app>
+
+
+<!-- <ion-content>
+  <ion-list id="inbox-list" style="margin-top: -28px ">
+    <ion-menu-toggle auto-hide="false" *ngFor="let p of pages; let i = index" >
+      <ion-item *ngIf="p.show_in_dash === '0'"  (click)="openpage(p.component)" lines="none" detail="false" routerLinkActive="selected">
+        <ion-icon aria-hidden="true" slot="start" [ios]="p.icon + '-outline'" [md]="p.icon + '-sharp'"></ion-icon>
+        <ion-label>{{ p.title }}</ion-label>
+      </ion-item>
+    </ion-menu-toggle>
+  </ion-list>
+
+
+</ion-content> -->

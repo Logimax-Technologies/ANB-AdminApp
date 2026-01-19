@@ -1,0 +1,163 @@
+<ion-header>
+  <ion-toolbar>
+    <ion-title>
+  <ion-icon name="arrow-back-outline" (click)="cancel()"></ion-icon>
+     <span>
+      Customer Details
+     </span> </ion-title>
+</ion-toolbar>
+</ion-header>
+<ion-content class="ion-padding">
+
+  <ion-card style="
+           box-shadow: rgba(50, 50, 105, 0.15) 0px 2px 5px 0px, rgba(0, 0, 0, 0.05) 0px 1px 1px 0px;width: 96%;
+    margin-left: 6px;margin-top: -5px;">
+           <ion-card-content style="
+           font-size: 13px;
+           font-weight: 600;line-height:1.3;padding: 9px;">
+            <ion-row>
+              <ion-col col-6>
+                <ion-row>
+                  <ion-col col-6>
+                    <span style="color: black;">Customer </span>
+                  </ion-col>
+                  <ion-col col-6>
+                    {{cus_detail.firstname}}
+                  </ion-col>
+                </ion-row>
+            </ion-col>
+              <ion-col col-6>
+                <ion-row>
+                  <ion-col col-6> <span style="color: black;">Mobile</span></ion-col>
+                  <ion-col col-6>{{cus_detail.mobile}}</ion-col>
+                </ion-row>
+             </ion-col>
+            </ion-row>
+            <ion-row>
+              <ion-col col-6>
+                <ion-row>
+                  <ion-col col-6>
+                    <span style="color: black;">Gold(G)</span>
+                  </ion-col>
+                  <ion-col col-6>
+                    {{cus_detail.gold_wt}}
+                  </ion-col>
+                </ion-row>
+                <!-- <span style="color: black;">Gold(G) </span> {{cus_detail.gold_wt}}</ion-col> -->
+              </ion-col>
+                <ion-col col-6>
+                <ion-row>
+                  <ion-col col-6>
+                    <span style="color: black;">Silver(G) </span>
+                  </ion-col>
+                  <ion-col col-6>
+                    {{cus_detail.silver_wt}}
+                  </ion-col>
+                </ion-row>
+                <!-- <span style="color: black;">Silver(G) </span>{{cus_detail.silver_wt}}</ion-col> -->
+              </ion-col>
+              </ion-row>
+            <ion-row>
+              <ion-col col-6 style="display: flex;">
+                <ion-row>
+                  <ion-col col-6>
+                    <span style="color: black;">Rating</span>
+                  </ion-col>
+                  <ion-col col-6>
+                    <div style="    margin-left: 5px;">
+                      <ion-icon color="primary" *ngFor="let item of list;let i = index" [name]="condition > i+1? 'star':'star-outline'  ">
+                      </ion-icon>
+                    </div>
+                  </ion-col>
+                </ion-row>
+                <!-- <span style="color: black;">Rating </span> <div style="    margin-left: 5px;">
+                <ion-icon color="primary" *ngFor="let item of list;let i = index" [name]="condition > i+1? 'star':'star-outline'  ">
+                </ion-icon>
+              </div> -->
+            </ion-col>
+               <ion-col col-6>
+                <ion-row>
+                  <ion-col col-6>
+                    <span style="color: black;">MRP (Rs)</span>
+                  </ion-col>
+                  <ion-col col-6>
+                    {{cus_detail.tot_amount}}
+                  </ion-col>
+                </ion-row>
+                <!-- <span style="color: black;">MRP (Rs) </span>{{cus_detail.tot_amount}} -->
+              </ion-col>
+             </ion-row>
+            <ion-row>
+              <ion-col col-4 style="display: flex;">
+                <div>Active(Ac)  </div><div style="margin-top: -1px;margin-left: 4px;">
+                  <ion-badge style="color: white;font-size: 13px;" color="success">{{cus_detail.active_acc}}</ion-badge>
+                </div></ion-col>
+                <ion-col col-4 style="display: flex;">
+                  <div>Closed(Ac)</div><div style="margin-top: -1px;margin-left: 4px;">
+                    <ion-badge style="color: white;font-size: 13px;" color="danger">{{cus_detail.closed_count}}</ion-badge>
+                  </div></ion-col>
+                  <ion-col col-4 style="display: flex;">
+                    <div>Total(Ac)</div><div style="margin-top: -1px;margin-left: 4px;">
+                      <ion-badge style="color: white;font-size: 13px;" color="success">{{cus_detail.tot_account}}</ion-badge>
+                    </div></ion-col>
+            </ion-row>
+
+
+           </ion-card-content>
+
+           <!-- <ion-col col-4>Inactive (Ac) - {{cus_detail.inactive_acount}}</ion-col> -->
+
+        </ion-card>
+
+        <!-- <ion-card style="
+        box-shadow: rgba(50, 50, 105, 0.15) 0px 2px 5px 0px, rgba(0, 0, 0, 0.05) 0px 1px 1px 0px;width: 96%;
+ margin-left: 6px;margin-top: -5px;padding: 2px;">
+ <div>
+  <span style=" font-size: 13px;
+  font-weight: 600;color: black;margin-left: 10px;">Outsatanding Details</span>
+ </div>
+        <ion-card-content style="
+        font-size: 13px;
+        font-weight: 600;line-height: 2;padding: 9px;">
+         <ion-row>
+           <ion-col col-6><span style="color: black;">Total Bill Amt </span>₹{{cus_detail1.tot_bill_amount}}</ion-col>
+           <ion-col col-6><span style="color: black;">Balance Amt </span>₹{{cus_detail1.bal_amt}}</ion-col>
+         </ion-row>
+
+
+
+        </ion-card-content>
+
+
+     </ion-card> -->
+          <ion-grid style="margin-top: -7px;">
+            <ion-row>
+              <ion-col class="table-data" size="2" size-sm="3">Date</ion-col>
+              <ion-col class="table-data"  size="2" size-sm="3">Bill No</ion-col>
+              <ion-col class="table-data" size="2" size-sm="3">Branch</ion-col>
+              <ion-col class="table-data" size="3" size-sm="3">Gold/Silver <span style="font-size: 11px;">Gms</span></ion-col>
+              <ion-col class="table-data" size="3" size-sm="3">Amount</ion-col>
+            </ion-row>
+            <ion-row *ngFor="let data of bill_detail">
+              <ion-col class="table-data1" size="2" size-sm="3">{{data.bill_date}}</ion-col>
+              <ion-col class="table-data1"  size="2" size-sm="3">{{data.bill_no}}</ion-col>
+              <ion-col class="table-data1" size="2" size-sm="3">{{data.brn_short_name}}</ion-col>
+              <ion-col class="table-data1" size="3" size-sm="3">
+                <ion-row>
+                  <ion-col width-50>
+                    <img  style="width: 12px !important;
+                    height: 12px !important;" src='assets/gold.svg'/>
+                   {{data.gold_wt}}</ion-col>
+                  <ion-col width-50>
+                    <img  style="width: 12px !important;
+                    height: 12px !important;" src='assets/silver.svg'/>
+                    {{data.silver_wt}}</ion-col>
+            </ion-row>
+                </ion-col>
+              <ion-col class="table-data1" size="3" size-sm="3">₹{{data.tot_bill_amount}}</ion-col>
+            </ion-row>
+          </ion-grid>
+
+
+
+</ion-content>

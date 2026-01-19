@@ -1,0 +1,237 @@
+ion-content {
+  --background: #ffff;
+
+  .title {
+    color: #ffd3a5;
+    text-align: center;
+  }
+}
+
+.header-logo{
+  width: 50% !important;
+  height: 60px !important;
+}
+
+.box {
+  margin: 20px;
+  padding: 25px 20px;
+  box-shadow: 0px 1px 15px 1px rgba(69, 65, 78, 0.08);
+  background-color: #2b2d3e;
+
+  padding-top: 10px;
+  padding-bottom: 10px;
+  text-shadow: 0 1px 1px 1px #666;
+  position: relative;
+  border-radius: 5px;
+
+  .details {
+    position: absolute;
+    color: #fff;
+    transform: scale(0.8) translate(-10px, 35px);
+
+    h1,
+    h2 {
+      font-weight: 600;
+      margin: 5px;
+    }
+  }
+}
+
+.box1 {
+  background-image: linear-gradient(135deg, #ffd3a5 10%, #fd6585 100%);
+}
+
+.box3 {
+  padding: 0;
+  padding-top: 10px;
+}
+
+.box5 {
+  padding: 0;
+  padding-top: 10px;
+}
+
+
+ion-content {
+  background-color: #f0f0f0;
+}
+
+ion-slide {
+  text-align: center;
+  padding: 20px;
+}
+
+ion-slide h1 {
+  font-size: 1.5em;
+  font-weight: bold;
+}
+
+ion-slide p {
+  font-size: 1em;
+}
+
+swiper-container {
+  width: 100%;
+}
+
+swiper-slide {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+}
+
+
+#chart {
+  max-width: 380px;
+  margin: 35px auto;
+  padding: 0;
+}
+
+
+
+div.scrollmenu {
+  // background-color: #630b23 !important;
+  overflow: auto;
+  font-weight: bold;
+  white-space: nowrap;
+  overflow-x: scroll;
+  overflow-y: hidden;
+  display: -webkit-box;
+  // margin-top: -26px;
+}
+
+.demo{
+  margin-left: 7px !important;
+}
+
+
+
+.custom-popover {
+  --width: 93px;
+  --height: 100px;
+  // margin-top: 13px;
+}
+
+
+.last-slide{
+  margin-left: -2px !important;
+}
+
+.scrollmenu_but{
+  overflow: auto;
+  white-space: nowrap;
+  background: white !important;
+
+}
+
+button {
+  padding: 12px;
+  border: 0;
+  border-radius: 8px;
+  font-family: inherit;
+  font-style: inherit;
+  font-variant: inherit;
+  line-height: 1;
+  text-transform: none;
+  -webkit-appearance: button;
+  white-space: 20px;
+  margin-right: 10px
+
+}
+
+.a
+{
+    background: #f0f0f0;
+}
+.b
+{
+    background: #e4dddd;
+    }
+
+    .card1{
+      padding: 4px;
+      box-shadow: rgba(17, 17, 26, 0.1) 0px 4px 16px, rgba(17, 17, 26, 0.1) 0px 8px 24px, rgba(17, 17, 26, 0.1) 0px 16px 56px;
+
+    }
+    .title1{
+      margin: auto;
+      text-wrap: wrap;
+      text-align: center;
+  }
+
+
+
+  ion-spinner {
+    width: 100px;
+    height: 100px;
+  }
+
+
+  .ripple-parent {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    position: relative;
+    overflow: hidden;
+
+    border: 1px solid #ddd;
+
+    user-select: none;
+
+    width: 100%;
+    height: 50px;
+    border-radius: 8px;
+  }
+
+  .custom-parent {
+    color: #FEB680;
+  }
+
+  .custom-ripple {
+    color: #501ace;
+  }
+
+  .ion-color-warning {
+    --ion-color-base: var(--ion-color-warning, #ffc409) !important;
+    --ion-color-base-rgb: var(--ion-color-warning-rgb, 255, 196, 9) !important;
+    --ion-color-contrast: #ffffff !important;
+    --ion-color-contrast-rgb: var(--ion-color-warning-contrast-rgb, 0, 0, 0) !important;
+    --ion-color-shade: var(--ion-color-warning-shade, #e0ac08) !important;
+    --ion-color-tint: var(--ion-color-warning-tint, #ffca22) !important;
+}
+
+.ion-color-success {
+  --ion-color-base: var(--ion-color-success, #2dd36f) !important;
+  --ion-color-base-rgb: var(--ion-color-success-rgb, 45, 211, 111) !important;
+  --ion-color-contrast: #ffffff !important;
+  --ion-color-contrast-rgb: var(--ion-color-success-contrast-rgb, 255, 255, 255) !important;
+  --ion-color-shade: var(--ion-color-success-shade, #28ba62) !important;
+  --ion-color-tint: var(--ion-color-success-tint, #42d77d) !important;
+}
+
+
+.table-data{
+  background-color: #3F51B5;
+  color: white;
+  text-align: center;
+  font-size: 12px;
+}
+
+.table-data1{
+  background-color: rgb(238 241 243);
+  color: #131111;
+  text-align: center;
+  font-size: 11px;
+}
+
+
+.input-fill-outline.sc-ion-input-md-h {
+  --border-color: var(--ion-color-step-300, #b3b3b3);
+  --border-radius: 4px;
+  --padding-start: 16px;
+  --padding-end: 16px;
+  min-height: 42px !important;
+}
+
