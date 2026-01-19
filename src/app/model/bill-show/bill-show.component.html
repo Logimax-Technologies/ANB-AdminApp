@@ -1,0 +1,40 @@
+<ion-header>
+  <ion-toolbar>
+    <ion-title>
+  <ion-icon name="arrow-back-outline" (click)="cancel()"></ion-icon>
+     <span>
+      {{title}}
+     </span> </ion-title>
+</ion-toolbar>
+</ion-header>
+<ion-content class="ion-padding">
+<ion-row style="    font-size: 19px;
+margin-left: -18px;
+color: white;
+width: 110%;
+background-color: #0e0268;
+margin-top: -16px;">
+  <ion-col no-padding text-wrap col-12>
+    <div class="theme-title-blk" style="margin-left: 12px;"> <ion-icon style="margin-top: 2px;" name="pricetags"></ion-icon> <span> Bill List </span><ion-badge color="light" float-right></ion-badge></div>
+  </ion-col>
+  </ion-row>
+  <ion-row *ngFor="let data of bill_list" style="margin-top: 10px;border: 1px solid lightgrey;width: 110%;
+  margin-left: -18px" >
+    <ion-col col-8 style="padding: 10px;" >
+        {{data.file_name}}
+    </ion-col>
+    <!-- <ion-col col-8 style="padding: 10px;" *ngIf="bt_approve === true">
+      {{data.file_name}}
+  </ion-col> -->
+
+<ion-col col-2></ion-col>
+    <ion-col  col-2 style="background-color: #0e0268 !important;text-align: center;padding: 5px;"  (click)="get_print(data,2)">
+      <ion-icon style="color: white;font-size: 24px;" name="print"></ion-icon>
+    </ion-col>
+    <!-- <ion-col  col-2 style="background-color: #0e0268 !important;text-align: center;padding: 5px;" *ngIf="bt_approve === true" (click)="get_print(data,2)">
+      <ion-icon style="color: white;font-size: 24px;" name="print"></ion-icon>
+    </ion-col> -->
+  </ion-row>
+
+
+</ion-content>

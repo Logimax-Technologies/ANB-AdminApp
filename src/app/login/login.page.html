@@ -1,0 +1,50 @@
+
+<ion-content [fullscreen]="true">
+  <div class="margin" style="text-align: center;margin-top: 25px;">
+    <img style="height: 70px;" src='assets/header-final.svg' />
+    <p class="theme-color">{{cmpName}}</p>
+</div>
+<ion-card>
+  <ion-card-header>
+<form [formGroup]="loginForm" (ngSubmit)="onSubmit(loginForm.value)" class="ion-margin">
+  <div class="ion-margin-vertical">
+    <ion-item lines="full">
+      <ion-input type="text" formControlName="username" label="User Name" labelPlacement="floating" placeholder="User Name" name="username"> </ion-input>
+    </ion-item>
+  </div>
+  <div class="ion-margin-vertical">
+    <ion-item lines="full">
+      <ion-icon [name]="type ? 'eye' : 'eye-off'" slot="end" color="dark" (click)="changeType()"></ion-icon>
+      <ion-input formControlName="password" [type]="type ? 'password' : 'text'" label="Password" labelPlacement="floating" placeholder="Enter password"></ion-input>
+    </ion-item>
+  </div>
+
+  <ion-item>
+    <ion-select label="Branch" formControlName="id_branch" labelPlacement="floating">
+      <ion-select-option *ngFor="let b of branches" [value]="b.id_branch">{{b.name}}</ion-select-option>
+    </ion-select>
+  </ion-item>
+
+<ion-row>
+  <ion-col col-12 style="display: flex;margin-top: 8px;">
+    <ion-checkbox formControlName="remember2" (ionChange)="updateremember2(remember2.value)"></ion-checkbox>
+    <span style="font-size: 14px;font-weight: normal;color: #222;float:left;margin:auto;margin-left: 10px;">Remember me</span>
+  </ion-col>
+</ion-row>
+
+<ion-row>
+  <ion-col></ion-col>
+  <ion-col> <ion-button color="secondary" type="submit">Login</ion-button>
+  </ion-col>
+  <ion-col></ion-col>
+</ion-row>
+
+</form>
+</ion-card-header>
+</ion-card>
+</ion-content>
+<ion-footer translucent="true" no-lines align="center">
+  <ion-toolbar>
+    <ion-title style="font-size: smaller;font-weight: bold;">Current Version ({{maintain_ver}})</ion-title>
+  </ion-toolbar>
+</ion-footer>

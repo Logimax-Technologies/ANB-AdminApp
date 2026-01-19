@@ -1,0 +1,24 @@
+.table-data{
+  background-color:rgb(169, 169, 169);
+  border: solid 1px #fff;
+  color: #1a1515;
+  text-align: center;
+  font-size: 13px;
+}
+
+.table-data1{
+  background-color:rgb(243, 243, 243);
+  border: solid 1px #fff;
+  color: #1a1515;
+  text-align: center;
+  font-size: 11px;
+}
+
+.ion-color-primary {
+  --ion-color-base: #FFEB3B !important;
+  --ion-color-base-rgb: var(--ion-color-primary-rgb, 56, 128, 255) !important;
+  --ion-color-contrast: var(--ion-color-primary-contrast, #fff) !important;
+  --ion-color-contrast-rgb: var(--ion-color-primary-contrast-rgb, 255, 255, 255) !important;
+  --ion-color-shade: var(--ion-color-primary-shade, #3171e0) !important;
+  --ion-color-tint: var(--ion-color-primary-tint, #4c8dff) !important;
+}

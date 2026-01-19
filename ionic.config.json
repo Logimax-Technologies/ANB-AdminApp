@@ -1,0 +1,23 @@
+{
+  "name": "ANB",
+  "integrations": {
+    "capacitor": {
+      "plugins": {
+        "SplashScreen": {
+          "launchAutoHide": false,
+          "androidScaleType": "CENTER_CROP",
+          "splashFullScreen": true,
+          "splashImmersive": false,
+          "backgroundColor": "#ffffff"
+        },
+        "Device": {
+          "someConfig": "value"
+        }
+      }
+    },
+    "compilerOptions": {
+      "types": ["onesignal"]
+    }
+  },
+  "type": "angular"
+}

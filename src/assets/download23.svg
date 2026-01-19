@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="utf-8"?>
+<svg width="200px" height="200px" viewBox="0 0 200 200" version="1.1" xmlns:xlink="http://www.w3.org/1999/xlink" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <path d="M200 0L200 0L200 200L0 200L0 0L200 0Z" id="path_1" />
+    <clipPath id="clip_1">
+      <use xlink:href="#path_1" clip-rule="evenodd" fill-rule="evenodd" />
+    </clipPath>
+  </defs>
+  <g id="download1-svgrepo-com" clip-path="url(#clip_1)">
+    <path d="M200 0L200 0L200 200L0 200L0 0L200 0Z" id="download1-svgrepo-com" fill="none" stroke="none" />
+    <path d="M125.132 92.29C125.132 92.29 127.868 39.1889 94.0513 33.1336C65.061 28.8761 56.2406 67.6253 56.2406 67.6253C56.2406 67.6253 47.5131 55.5511 35.6653 65.4145C25.0674 74.8285 26.9378 92.0653 26.9378 92.0653C26.9378 92.0653 3.39429 98.6429 3.39429 133.171C3.92208 167.651 28.9603 167.997 28.9603 167.997L76.8876 167.997L55.7761 137.629L68.443 137.629L68.443 101.188L85.3322 101.188L85.3322 137.629L97.9991 137.629L76.8876 167.997L121.082 167.997C121.082 167.997 144.39 168.033 147.662 135.23C149.22 99.3596 125.132 92.29 125.132 92.29L125.132 92.29Z" id="Shape" fill="#59ADFF" stroke="none" />
+  </g>
+</svg>
